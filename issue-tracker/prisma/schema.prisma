@@ -10,3 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// store models in our database
+model Issue {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  status      Status   @default(OPEN)
+  created_at  DateTime @default(now())
+  Updated_at  DateTime @updatedAt
+}
+
+// Enums only in mysql its just a setup of values we can link into a db
+enum Status {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}

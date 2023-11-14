@@ -14,7 +14,7 @@ const NavBar = () => {
     },
     {
       label: "Issues",
-      href: "/Issues",
+      href: "/issues",
     },
   ];
 
@@ -31,12 +31,12 @@ const NavBar = () => {
           return (
             <li
               key={link.href}
-              // calling classnames this way makes code cleaner
+              // calling classnames this way makes code
               className={classnames({
                 "text-zinc-900": link.href === currentPath,
                 "text-zinc-500": link.href !== currentPath,
                 // renders at all times
-                "hover: text-zinc-900 transition-colors": true,
+                "hover:text-zinc-900 transition-colors": true,
               })}
             >
               <Link href={link.href}>{link.label}</Link>

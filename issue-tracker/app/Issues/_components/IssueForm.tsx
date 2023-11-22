@@ -27,6 +27,7 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
 type IssueFormData = z.infer<typeof IssueSchema>;
 
 const IssueForm = ({ issue }: { issue?: Issue }) => {
+  const router = useRouter();
   const {
     register,
     control,
@@ -36,15 +37,17 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
     resolver: zodResolver(IssueSchema),
   });
   console.log(register("title"));
-  const router = useRouter();
+
   const [error, setError] = useState("");
   const [isSubmitting, setSubmitting] = useState(false);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
-      await axios.post("/api/issues", data);
+      if (issue) await axios.patch("/api/issues/" + issue.id, data);
+      else await axios.post("/api/issues", data);
       router.push("/issues");
+      router.refresh();
     } catch (error) {
       setError("an unexpected error occurred");
       setSubmitting(false);
@@ -76,8 +79,19 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
           )}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
+        {issue ? (
+          <TextFieldRoot>
+            <TextFieldInput
+              defaultValue={issue?.status}
+              placeholder="status"
+              {...register("status")}
+            />{" "}
+            <ErrorMessage>{errors.status?.message}</ErrorMessage>
+          </TextFieldRoot>
+        ) : null}
         <Button disabled={isSubmitting}>
-          Submit New Issue {isSubmitting && <Spinner />}
+          {issue ? "Update Issue" : "Submit New Issue"}{" "}
+          {isSubmitting && <Spinner />}
         </Button>
       </form>
     </div>

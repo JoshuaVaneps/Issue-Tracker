@@ -1,7 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { string } from "zod";
-import { PrismaClient } from "@prisma/client";
 import prisma from "@/prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 import { IssueSchema } from "../../validationSchemas";
 
 export async function POST(request: NextRequest) {
